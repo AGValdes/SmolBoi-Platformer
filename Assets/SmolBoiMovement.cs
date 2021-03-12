@@ -5,38 +5,37 @@ using UnityEngine;
 public class SmolBoiMovement : MonoBehaviour
 {
   private Rigidbody2D rigidbody;
-  public Vector2 speed = new Vector2(10, 10);
+  [SerializeField] private float speed = 10F;
+  [SerializeField] private float jumpSpeed = 10F;
 
-  private Vector2 movement = new Vector2(1, 1);
 
   // Use this for initialization
   void Start()
   {
     rigidbody = GetComponent<Rigidbody2D>();
-    rigidbody.gravityScale = 20;
+    rigidbody.gravityScale = 35;
   }
 
   // Update is called once per frame
   void Update()
   {
-    float inputX = Input.GetAxis("Horizontal");
-    float inputY = Input.GetAxis("Vertical");
+    transform.Translate(Input.GetAxis("Horizontal") * speed * Time.deltaTime, 0, 0, Space.World);
 
-    movement = new Vector2(
-        speed.x * inputX,
-        speed.y * 0);
+    RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up);
 
-    if (Input.GetKeyDown("space"))
+    if ((hit != false) && (Input.GetKeyDown(KeyCode.Space)))
     {
-      transform.Translate(Vector3.up * 110 * Time.deltaTime, Space.World);
+     
+      Jump();
+    
     }
 
   }
-  void FixedUpdate()
+  void Jump()
   {
-    // 5 - Move the game object
-    rigidbody.velocity = movement;
-    //rigidbody2D.AddForce(movement);
+
+    rigidbody.velocity = new Vector2(0, jumpSpeed);
+
 
   }
 
